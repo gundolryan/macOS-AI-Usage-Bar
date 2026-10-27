@@ -69,18 +69,20 @@
  double used=MAX(0,MIN(100,n.doubleValue)); return [NSString stringWithFormat:@"  %@  ·  사용 %.0f%%  ·  %@",name,used,when];
 }
 - (void)line:(NSString *)s menu:(NSMenu *)menu { NSMenuItem *i=[[NSMenuItem alloc] initWithTitle:s action:nil keyEquivalent:@""]; i.enabled=NO; [menu addItem:i]; }
-- (void)updateBadge:(NSString *)text {
+- (void)updateBadge:(NSString *)claude codex:(NSString *)codex {
  NSFont *font=[NSFont monospacedDigitSystemFontOfSize:11 weight:NSFontWeightSemibold];
- NSColor *ink=NSColor.labelColor;
- NSDictionary *attrs=@{NSFontAttributeName:font, NSForegroundColorAttributeName:ink};
- NSSize textSize=[text sizeWithAttributes:attrs];
- NSSize size=NSMakeSize(ceil(textSize.width)+16, 22);
+ NSDictionary *attrs=@{NSFontAttributeName:font, NSForegroundColorAttributeName:NSColor.whiteColor};
+ NSSize cSize=[claude sizeWithAttributes:attrs], xSize=[codex sizeWithAttributes:attrs];
+ CGFloat cWidth=ceil(cSize.width)+16, xWidth=ceil(xSize.width)+16, gap=4;
+ NSSize size=NSMakeSize(cWidth+xWidth+gap, 22);
  NSImage *badge=[NSImage imageWithSize:size flipped:NO drawingHandler:^BOOL(NSRect bounds) {
-  NSRect box=NSInsetRect(bounds,1,2);
-  NSBezierPath *path=[NSBezierPath bezierPathWithRoundedRect:box xRadius:5 yRadius:5];
-  [[NSColor.controlAccentColor colorWithAlphaComponent:0.20] setFill]; [path fill];
-  [[NSColor.controlAccentColor colorWithAlphaComponent:0.55] setStroke]; path.lineWidth=1; [path stroke];
-  [text drawAtPoint:NSMakePoint(8, (bounds.size.height-textSize.height)/2) withAttributes:attrs];
+  NSRect cBox=NSMakeRect(0,2,cWidth,18), xBox=NSMakeRect(cWidth+gap,2,xWidth,18);
+  NSBezierPath *cPath=[NSBezierPath bezierPathWithRoundedRect:cBox xRadius:5 yRadius:5];
+  NSBezierPath *xPath=[NSBezierPath bezierPathWithRoundedRect:xBox xRadius:5 yRadius:5];
+  [[NSColor colorWithCalibratedRed:0.64 green:0.27 blue:0.13 alpha:1] setFill]; [cPath fill];
+  [[NSColor colorWithCalibratedRed:0.36 green:0.19 blue:0.61 alpha:1] setFill]; [xPath fill];
+  [claude drawAtPoint:NSMakePoint(8,(bounds.size.height-cSize.height)/2) withAttributes:attrs];
+  [codex drawAtPoint:NSMakePoint(cWidth+gap+8,(bounds.size.height-xSize.height)/2) withAttributes:attrs];
   return YES;
  }];
  badge.template=NO; self.item.button.title=@""; self.item.button.image=badge;
@@ -105,7 +107,9 @@
  [m addItem:NSMenuItem.separatorItem]; NSMenuItem *refresh=[[NSMenuItem alloc] initWithTitle:@"지금 새로고침" action:@selector(manualRefresh) keyEquivalent:@"r"]; refresh.target=self; [m addItem:refresh];
  [m addItem:[[NSMenuItem alloc] initWithTitle:@"종료" action:@selector(terminate:) keyEquivalent:@"q"]]; self.item.menu=m;
  NSNumber *updated=self.claude[@"updated_at"]; BOOL stale=[updated isKindOfClass:NSNumber.class] && NSDate.date.timeIntervalSince1970-updated.doubleValue >= 3600;
- [self updateBadge:[NSString stringWithFormat:@"Claude Code [%@ / %@%@ / %@]   ·   Codex [%@ / %@ / %@]",[self used:rates[@"five_hour"][@"used_percentage"]],[self used:rates[@"seven_day"][@"used_percentage"]],stale ? @"!" : @"",[self countdown:rates[@"seven_day"][@"resets_at"]],[self used:q[@"primary"][@"usedPercent"]],[self used:q[@"secondary"][@"usedPercent"]],[self countdown:q[@"secondary"][@"resetsAt"]]]];
+ NSString *claudeText=[NSString stringWithFormat:@"Claude Code [%@ / %@%@ / %@]",[self used:rates[@"five_hour"][@"used_percentage"]],[self used:rates[@"seven_day"][@"used_percentage"]],stale ? @"!" : @"",[self countdown:rates[@"seven_day"][@"resets_at"]]];
+ NSString *codexText=[NSString stringWithFormat:@"Codex [%@ / %@ / %@]",[self used:q[@"primary"][@"usedPercent"]],[self used:q[@"secondary"][@"usedPercent"]],[self countdown:q[@"secondary"][@"resetsAt"]]];
+ [self updateBadge:claudeText codex:codexText];
 }
 @end
 int main(int argc, const char *argv[]) { @autoreleasepool { NSApplication *app=NSApplication.sharedApplication; App *delegate=[App new]; app.delegate=delegate; [app setActivationPolicy:NSApplicationActivationPolicyAccessory]; [app run]; } return 0; }
