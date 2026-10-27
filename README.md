@@ -1,4 +1,4 @@
-# AI 사용량 바
+# macOS AI 사용량 한도 확인 바
 
 ![Claude Code와 Codex의 세션·주간 사용률을 표시하는 메뉴 막대](images/menu-bar.png)
 
