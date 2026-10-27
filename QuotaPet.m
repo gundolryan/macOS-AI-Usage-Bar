@@ -18,6 +18,7 @@
  [self updateMenu]; [self refreshClaude]; if (self.loading) return; self.loading=YES;
  dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY,0), ^{
   NSTask *task=[NSTask new]; task.executableURL=[NSURL fileURLWithPath:@"/usr/bin/python3"];
+  task.currentDirectoryURL=[NSURL fileURLWithPath:@"/private/tmp" isDirectory:YES];
   task.arguments=@[[[NSBundle mainBundle] pathForResource:@"codex_usage" ofType:@"py"]];
   NSMutableDictionary *env=[NSProcessInfo.processInfo.environment mutableCopy]; env[@"PATH"]=[NSString stringWithFormat:@"%@/.local/bin:%@/bin:%@/.npm-global/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:%@", NSHomeDirectory(), NSHomeDirectory(), NSHomeDirectory(), env[@"PATH"] ?: @""]; task.environment=env;
   NSPipe *pipe=[NSPipe pipe]; task.standardOutput=pipe; task.standardError=[NSFileHandle fileHandleForWritingAtPath:@"/dev/null"];
@@ -32,6 +33,7 @@
  self.claudeLoading=YES; self.lastClaudeAttempt=NSDate.date;
  dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY,0), ^{
   NSTask *task=[NSTask new]; task.executableURL=[NSURL fileURLWithPath:@"/usr/bin/python3"];
+  task.currentDirectoryURL=[NSURL fileURLWithPath:@"/private/tmp" isDirectory:YES];
   task.arguments=@[[[NSBundle mainBundle] pathForResource:@"claude_usage" ofType:@"py"]];
   NSMutableDictionary *env=[NSProcessInfo.processInfo.environment mutableCopy]; env[@"PATH"]=[NSString stringWithFormat:@"%@/.local/bin:%@/bin:%@/.npm-global/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:%@", NSHomeDirectory(), NSHomeDirectory(), NSHomeDirectory(), env[@"PATH"] ?: @""]; task.environment=env;
   NSPipe *pipe=[NSPipe pipe]; task.standardOutput=pipe; task.standardError=[NSFileHandle fileHandleForWritingAtPath:@"/dev/null"];
