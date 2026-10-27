@@ -28,7 +28,7 @@
  });
 }
 - (void)refreshClaude {
- if (self.claudeLoading || (self.lastClaudeAttempt && -self.lastClaudeAttempt.timeIntervalSinceNow < 300)) return;
+ if (self.claudeLoading || (self.lastClaudeAttempt && -self.lastClaudeAttempt.timeIntervalSinceNow < 60)) return;
  self.claudeLoading=YES; self.lastClaudeAttempt=NSDate.date;
  dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY,0), ^{
   NSTask *task=[NSTask new]; task.executableURL=[NSURL fileURLWithPath:@"/usr/bin/python3"];
