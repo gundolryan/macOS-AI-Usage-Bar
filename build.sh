@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 APP="$PWD/AI Usage Bar.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-clang -fobjc-arc -O2 QuotaPet.m -o "$APP/Contents/MacOS/QuotaPet" -framework AppKit
+clang -arch arm64 -arch x86_64 -fobjc-arc -O2 QuotaPet.m -o "$APP/Contents/MacOS/QuotaPet" -framework AppKit
 cp codex_usage.py claude_usage.py "$APP/Contents/Resources/"
 cat > "$APP/Contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>

@@ -4,25 +4,32 @@
 
 macOS 메뉴 막대에서 Claude Code와 Codex 구독 사용량을 확인하는 작은 앱입니다. 각 서비스는 **세션 사용률 / 주간 사용률 / 주간 초기화까지 남은 시간** 순서로 표시합니다. 메뉴 막대를 클릭하면 초기화 시각과 마지막 갱신 시각을 확인할 수 있습니다.
 
-## 필요한 환경
+## 다운로드 및 실행
 
-- macOS와 Apple Command Line Tools (`xcode-select --install`)
-- `/usr/bin/python3`
-- 설치 및 로그인된 Claude Code CLI와 Codex CLI
-- 사용량 한도를 제공하는 Claude 및 ChatGPT 구독 계정
+1. [AI Usage Bar.zip 다운로드](https://github.com/gundolryan/Mac-AI-Usage-Bar/raw/refs/heads/main/downloads/AI-Usage-Bar.zip) 후 압축을 풉니다.
+2. `AI Usage Bar.app`을 응용 프로그램 폴더로 옮겨 실행합니다. 메뉴 막대에 사용량이 나타납니다.
+3. 앱은 Apple 개발자 서명 및 공증을 받지 않았습니다. macOS에서 실행을 막는 경우 앱의 출처를 확인한 뒤 시스템 설정의 개인정보 보호 및 보안에서 실행을 허용해야 할 수 있습니다.
 
-각 CLI에서 해당 서비스에 로그인해야 합니다. API 키나 일부 조직 계정에서는 구독 사용량 정보가 제공되지 않을 수 있습니다.
+앱은 Apple Silicon과 Intel Mac용 실행 파일을 함께 포함합니다. **사용량을 표시하려면** 이 Mac에 다음이 준비되어 있어야 합니다.
 
-## 빌드 및 실행
+- `/usr/bin/python3` (없다면 Apple Command Line Tools 설치: `xcode-select --install`)
+- Claude Code CLI와 Codex CLI 설치 및 각 구독 계정 로그인
+- 각 서비스에서 사용량 한도를 제공하는 플랜
 
-터미널에서 이 폴더로 이동한 뒤 실행하세요.
+Claude Code는 터미널에서 `claude`, Codex는 `codex login`으로 로그인할 수 있습니다. 두 CLI가 Homebrew 경로 또는 `~/.local/bin`, `~/bin`, `~/.npm-global/bin`에 설치되어 있지 않은 경우, 앱에서 찾지 못할 수 있습니다. API 키나 일부 조직 계정에서는 구독 한도가 표시되지 않을 수 있습니다.
+
+로그인 시 자동 실행하려면 macOS의 **시스템 설정 → 일반 → 로그인 항목**에 앱을 추가하세요.
+
+## 소스에서 빌드
+
+Apple Command Line Tools가 설치된 Mac에서 저장소를 내려받아 다음을 실행하세요.
 
 ```sh
 ./build.sh
 open 'AI Usage Bar.app'
 ```
 
-앱은 Dock이 아닌 메뉴 막대에 나타납니다. 로그인 시 자동으로 실행하려면 macOS의 **시스템 설정 → 일반 → 로그인 항목**에 앱을 추가하세요. 앱을 다시 빌드한 뒤에는 실행 중인 앱을 종료하고 다시 열어야 변경 사항이 적용됩니다.
+다시 빌드한 뒤에는 실행 중인 앱을 종료하고 다시 열어야 변경 사항이 적용됩니다.
 
 Claude는 5분마다, Codex는 1분마다 새로고침합니다. 메뉴에서 **지금 새로고침**을 누르면 두 서비스 모두 즉시 다시 조회합니다. Claude 수치 뒤의 `!`는 수치가 한 시간 이상 갱신되지 않았다는 뜻입니다. 초기화 시간이 지났는데 새 데이터가 오지 않으면 `갱신 중`으로 표시합니다.
 

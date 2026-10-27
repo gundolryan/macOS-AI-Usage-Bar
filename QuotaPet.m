@@ -19,7 +19,7 @@
  dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY,0), ^{
   NSTask *task=[NSTask new]; task.executableURL=[NSURL fileURLWithPath:@"/usr/bin/python3"];
   task.arguments=@[[[NSBundle mainBundle] pathForResource:@"codex_usage" ofType:@"py"]];
-  NSMutableDictionary *env=[NSProcessInfo.processInfo.environment mutableCopy]; env[@"PATH"]=[@"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:" stringByAppendingString:env[@"PATH"] ?: @""]; task.environment=env;
+  NSMutableDictionary *env=[NSProcessInfo.processInfo.environment mutableCopy]; env[@"PATH"]=[NSString stringWithFormat:@"%@/.local/bin:%@/bin:%@/.npm-global/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:%@", NSHomeDirectory(), NSHomeDirectory(), NSHomeDirectory(), env[@"PATH"] ?: @""]; task.environment=env;
   NSPipe *pipe=[NSPipe pipe]; task.standardOutput=pipe; task.standardError=[NSFileHandle fileHandleForWritingAtPath:@"/dev/null"];
   NSError *error=nil; NSDictionary *result=nil;
   if ([task launchAndReturnError:&error]) { NSData *d=[pipe.fileHandleForReading readDataToEndOfFile]; [task waitUntilExit]; result=[NSJSONSerialization JSONObjectWithData:d options:0 error:nil]; }
@@ -33,7 +33,7 @@
  dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY,0), ^{
   NSTask *task=[NSTask new]; task.executableURL=[NSURL fileURLWithPath:@"/usr/bin/python3"];
   task.arguments=@[[[NSBundle mainBundle] pathForResource:@"claude_usage" ofType:@"py"]];
-  NSMutableDictionary *env=[NSProcessInfo.processInfo.environment mutableCopy]; env[@"PATH"]=[@"/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:" stringByAppendingString:env[@"PATH"] ?: @""]; task.environment=env;
+  NSMutableDictionary *env=[NSProcessInfo.processInfo.environment mutableCopy]; env[@"PATH"]=[NSString stringWithFormat:@"%@/.local/bin:%@/bin:%@/.npm-global/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:%@", NSHomeDirectory(), NSHomeDirectory(), NSHomeDirectory(), env[@"PATH"] ?: @""]; task.environment=env;
   NSPipe *pipe=[NSPipe pipe]; task.standardOutput=pipe; task.standardError=[NSFileHandle fileHandleForWritingAtPath:@"/dev/null"];
   NSDictionary *result=nil; NSError *error=nil;
   if ([task launchAndReturnError:&error]) { NSData *data=[pipe.fileHandleForReading readDataToEndOfFile]; [task waitUntilExit]; result=[NSJSONSerialization JSONObjectWithData:data options:0 error:nil]; }
