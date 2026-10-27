@@ -6,7 +6,7 @@ macOS 메뉴 막대에서 Claude Code와 Codex 구독 사용량을 확인하는 
 
 ## 다운로드 및 실행
 
-1. [AI Usage Bar.zip 다운로드](https://github.com/gundolryan/Mac-AI-Usage-Bar/raw/refs/heads/main/downloads/AI-Usage-Bar.zip) 후 압축을 풉니다.
+1. [AI Usage Bar.zip 다운로드](https://github.com/gundolryan/macOS-AI-Usage-Bar/raw/refs/heads/main/downloads/AI-Usage-Bar.zip) 후 압축을 풉니다.
 2. `AI Usage Bar.app`을 응용 프로그램 폴더로 옮겨 실행합니다. 메뉴 막대에 사용량이 나타납니다.
 3. 앱은 Apple 개발자 서명 및 공증을 받지 않았습니다. macOS에서 실행을 막는 경우 앱의 출처를 확인한 뒤 시스템 설정의 개인정보 보호 및 보안에서 실행을 허용해야 할 수 있습니다.
 
